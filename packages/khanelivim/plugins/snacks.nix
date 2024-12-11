@@ -21,6 +21,17 @@
             })
           end
         ''
+      +
+        lib.optionalString (config.plugins.snacks.settings.debug.enabled) # Lua
+          ''
+            _G.dd = function(...)
+              Snacks.debug.inspect(...)
+            end
+            _G.bt = function()
+              Snacks.debug.backtrace()
+            end
+            vim.print = _G.dd
+          ''
     )
   );
 
@@ -67,10 +78,16 @@
           '';
         };
         bufdelete.enabled = true;
+        debug.enabled = true;
+        dim.enabled = true;
         gitbrowse.enabled = true;
         indent.enabled = true;
         lazygit.enabled = true;
+        notify.enabled = true;
+        notifier.enabled = true;
         profiler.enabled = true;
+        scope.enabled = true;
+        scratch.enabled = true;
         scroll.enabled = true;
         statuscolumn = {
           enabled = true;
@@ -80,6 +97,7 @@
             git_hl = config.plugins.gitsigns.enable;
           };
         };
+        toggle.enabled = true;
         zen.enabled = true;
       };
     };
@@ -109,6 +127,14 @@
         action = "<cmd>lua Snacks.lazygit()<CR>";
         options = {
           desc = "Open lazygit";
+        };
+      })
+      (lib.mkIf (config.plugins.snacks.enable && config.plugins.snacks.settings.dim.enabled) {
+        mode = "n";
+        key = "<leader>uz";
+        action = "<cmd>lua Snacks.dim()<CR>";
+        options = {
+          desc = "Enable dim";
         };
       })
       (lib.mkIf (config.plugins.snacks.enable && config.plugins.snacks.settings.zen.enabled) {
